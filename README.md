@@ -3,9 +3,9 @@
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
-2. Put "break" and "continue" in their places
-3. Arrange the functions in their places
-4. Catch bugs
+2. <strike>Put "break" and "cont</strike>inue" in their places
+3. <strike>Arrange the functions in their places</strike>
+4. <strike>Catch bu</strike>gs
 5. Correct variable names
 6. Add comments
 7. Add logging and sending notifications to the mail
