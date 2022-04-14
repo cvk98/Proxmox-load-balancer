@@ -1,7 +1,7 @@
 # Proxmox-load-balancer
 <i>in progress...</i>
 
-Development progress:
+<strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
 2. Put "break" and "continue" in their places
 3. Arrange the functions in their places
