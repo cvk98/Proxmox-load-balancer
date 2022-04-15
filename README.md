@@ -12,6 +12,7 @@
 8. <strike>Translate in</strike>to English
 9. <strike>Test on th</strike>ree clusters
 
+![Excluded px-3](https://user-images.githubusercontent.com/88323643/163579643-2ead1633-8849-43e1-a24f-259079dacc9d.png)
 
 This script is designed to automatically load balance the RAM of the cluster (or part of the cluster) Proxmox.
 It does not use the CPU load balancing mechanism. I consider this unnecessary for many reasons, which it is inappropriate to list here.
