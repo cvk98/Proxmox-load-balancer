@@ -7,7 +7,7 @@
 3. <strike>Arrange the functions in their places</strike>
 4. <strike>Ca</strike>tch bugs
 5. <strike>Correct variable names</strike>
-6. Add comments
+6. <strike>Add comments</strike>
 7. Add logging and sending notifications to the mail
-8. Translate into English
-9. Test on three clusters
+8. <strike>Translate in</strike>to English
+9. <strike>Test on th</strike>ree clusters
