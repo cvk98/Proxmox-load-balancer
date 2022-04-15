@@ -5,7 +5,7 @@
 1. <strike>Write a draft script</strike>
 2. <strike>Put "break" and "cont</strike>inue" in their places
 3. <strike>Arrange the functions in their places</strike>
-4. <strike>Catch bu</strike>gs
+4. <strike>Ca</strike>tch bugs
 5. <strike>Correct variable names</strike>
 6. Add comments
 7. Add logging and sending notifications to the mail
