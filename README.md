@@ -23,3 +23,5 @@ In particular:
 3. You can set the spread range of node loading, at which there is no balancing.
 4. The VM selection algorithm for migration has been significantly redesigned (other criteria are taken into account).
 5. This script works constantly and does not finish its work when the balance is reached. Just falls asleep for 5 minutes (can be changed)
+
+Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
