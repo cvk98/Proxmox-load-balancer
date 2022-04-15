@@ -25,4 +25,6 @@ In particular:
 4. The VM selection algorithm for migration has been significantly redesigned (other criteria are taken into account).
 5. This script works constantly and does not finish its work when the balance is reached. Just falls asleep for 5 minutes (can be changed)
 
+Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
+
 Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
