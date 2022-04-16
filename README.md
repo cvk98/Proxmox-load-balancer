@@ -1,5 +1,4 @@
-# Proxmox-load-balancer v0.1.0
-<i>in progress...</i>
+# Proxmox-load-balancer Pro v0.1.0
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
