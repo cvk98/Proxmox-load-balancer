@@ -19,7 +19,7 @@ LXC_MIGRATION = "OFF"  # Container migration (LXCs are rebooted during migration
 migration_timeout = 1000  # For the future
 
 """List of exclusions"""
-excluded_vms = ()  # Example: (100, 101, 102, 113, 125, 131)
+excluded_vms: tuple = ()  # Example: ('100',) or (100, 101, 102, 113, 125, 131)
 excluded_nodes: tuple = ()  # Example: ('px-3',) or ('px-3', 'px-4', 'px-8', 'px-9')
 
 GB = 1024 ** 3
