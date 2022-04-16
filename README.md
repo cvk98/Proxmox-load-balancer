@@ -1,4 +1,4 @@
-# Proxmox-load-balancer
+# Proxmox-load-balancer v0.1.0
 <i>in progress...</i>
 
 <strong>Development progress:</strong>
@@ -27,4 +27,14 @@ In particular:
 
 Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
 
+# Recommendations:
+1. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 0.03. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 3% in a larger or smaller direction.
+Example: cluster load is 50%, the minimum loaded node is 47%, the maximum loaded node is 53%.
+Moreover, it does not matter at all how much RAM the node has.
+
 Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
+Before using the script, please read the Supplement to the license
+
+**If you have any exceptions, please send them to my email. I'll try to help you.**
+
+If you want to support the author, you can do it using <b>Etherium</b> by sending a donation to <b>0x1Ee280393C04c8534D36170BF47AD199742579C5</b>
