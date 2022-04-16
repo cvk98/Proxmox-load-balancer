@@ -30,6 +30,7 @@ Most likely, the script does not need a root PVE account. You can create a separ
 1. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 0.03. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 3% in a larger or smaller direction.
 Example: cluster load is 50%, the minimum loaded node is 47%, the maximum loaded node is 53%.
 Moreover, it does not matter at all how much RAM the node has.
+2. For the script to work correctly, you need constant access to the Proxmox host. Therefore, I recommend running the script on one of the Proxmox nodes or creating a VM/Lc in a balanced cluster and configuring the script autorun.
 
 Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
 Before using the script, please read the Supplement to the license
