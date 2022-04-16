@@ -1,2 +1,1 @@
-This addendum to the GPL-3.0 License stipulates the following conditions:
-The author is prohibited from selling the program or part of it in its original or modified form without the explicit consent of the author.
+This addendum to the GPL-3.0 License stipulates the following conditions: The author forbids from selling the program or part of it in its original or modified form without the explicit consent of the author.
