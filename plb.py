@@ -13,7 +13,7 @@ server_url = "https://10.10.10.20:8006"
 auth = {'username': "root@pam", 'password': "PASSWORD"}
 
 """Options"""
-deviation = 0.01  # Permissible deviation from the average load of the balanced part of the cluster (10% for 0.05)
+deviation = 0.03  # Permissible deviation from the average load of the balanced part of the cluster (10% for 0.05)
 THRESHOLD = 0.9   # Dangerous loading threshold
 LXC_MIGRATION = "OFF"  # Container migration (LXCs are rebooted during migration!!!)
 migration_timeout = 1000  # For the future
