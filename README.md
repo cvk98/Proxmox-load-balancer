@@ -18,7 +18,7 @@ It does not use the CPU load balancing mechanism. I consider this unnecessary fo
 Unlike https://github.com/cvk98/Proxmox-memory-balancer the algorithm of this script has been significantly changed. 
 
 In particular:
-1. Added a list of exceptions for VM and node.
+1. Added a list of exclusions for the VMs and nodes.
 2. It is now possible to disable LXC migration.
 3. You can set the spread range of node loading, at which there is no balancing.
 4. The VM selection algorithm for migration has been significantly redesigned (other criteria are taken into account).
