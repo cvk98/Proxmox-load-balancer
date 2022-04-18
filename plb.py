@@ -76,7 +76,7 @@ class Cluster:
             print(f'Не удалось получить информацию о кластере. Код ответа: {nr.status_code}. Причина: ({nr.reason})')
             sys.exit()
         temp = name_request.json()["data"]
-        del name_request
+        del name_request, nr
         for i in temp:
             if i["type"] == "cluster":
                 name = i["name"]
@@ -97,7 +97,7 @@ class Cluster:
             sys.exit()
         self.cluster_information = rr.json()['data']
         # print(self.cluster_information)
-        del resources_request
+        del resources_request, rr
 
     def cluster_hosts(self):
         """Getting nodes from cluster resources"""
