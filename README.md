@@ -1,4 +1,4 @@
-# Proxmox-load-balancer Pro v0.1.0
+# Proxmox-load-balancer Pro v0.1.0  (run from PyCharm)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -8,7 +8,7 @@
 5. <strike>Correct variable names</strike>
 6. <strike>Add comments</strike>
 7. Add logging and sending notifications to the mail
-8. <strike>Translate in</strike>to English
+8. <b>Urgently translate into English</b>
 9. <strike>Test on th</strike>ree clusters
 
 ![Excluded px-3](https://user-images.githubusercontent.com/88323643/163580153-76426d78-b537-4159-82b6-e595a3b5792a.jpg)
