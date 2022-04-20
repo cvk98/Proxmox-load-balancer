@@ -1,4 +1,4 @@
-# Proxmox-load-balancer Pro v0.1.0  (run from PyCharm)
+# Proxmox-load-balancer Pro v0.2.0  (<strike>run from PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -8,7 +8,7 @@
 5. <strike>Correct variable names</strike>
 6. <strike>Add comments</strike>
 7. Add logging and sending notifications to the mail
-8. <b>Urgently translate into English</b>
+8. <strike><b>Urgently translate into English</b></strike>
 9. <strike>Test on th</strike>ree clusters
 
 ![Excluded px-3](https://user-images.githubusercontent.com/88323643/163580153-76426d78-b537-4159-82b6-e595a3b5792a.jpg)
@@ -34,6 +34,11 @@ Moreover, it does not matter at all how much RAM the node has.
 
 Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
 Before using the script, please read the Supplement to the license
+
+# Changelog:
+<b>0.2.0</b> (20.04.2022)
+1. All comments and messages are translated into English
+2. UTF-8 encoding throughout the document (tested on Ubuntu 20.04)
 
 **If you have any exceptions, please send them to my email. I'll try to help you.**
 
