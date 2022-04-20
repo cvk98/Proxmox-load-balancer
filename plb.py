@@ -22,8 +22,8 @@ migration_timeout = 1000  # For the future
 excluded_vms: tuple = ()  # Example: ('100',) or (100, 101, 102, 113, 125, 131)
 excluded_nodes: tuple = ()  # Example: ('px-3',) or ('px-3', 'px-4', 'px-8', 'px-9')
 
-GB = 1024 ** 3
-TB = GB * 1024
+GB = 1e+9
+TB = 1e+12
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
