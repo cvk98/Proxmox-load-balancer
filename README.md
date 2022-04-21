@@ -33,6 +33,24 @@ Example: cluster load is 50%, the minimum loaded node is 47%, the maximum loaded
 Moreover, it does not matter at all how much RAM the node has.
 2. Do not set the "deviation" value to 0. This will result in a permanent VM migration at the slightest change to the VM["mem"]. The recommended minimum value is 0.01 for large clusters with many different VMs. For medium and small clusters 0.03-0.05+
 3. For the script to work correctly, you need constant access to the Proxmox host. Therefore, I recommend running the script on one of the Proxmox nodes or creating a VM/Lxc in a balanced cluster and configuring the script autorun.
+4. To autorun the script on Linux (ubuntu):
+a) touch /etc/systemd/system/load-balancer.service
+b) chmod 664 /etc/systemd/system/load-balancer.service
+c)Add the following lines to it:
+[Unit]
+Description=Proxmor cluster load-balancer Service
+After=network.target
+
+[Service]
+Type=simple
+User=<b>USERNAME</b>
+ExecStart=/home/<b>USERNAME</b>/plb.py
+Restart=always
+RestartSec=300
+
+[Install]
+WantedBy=multi-user.target
+
 
 Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual
 Before using the script, please read the Supplement to the license
