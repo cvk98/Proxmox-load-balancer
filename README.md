@@ -1,4 +1,4 @@
-# Proxmox-load-balancer Pro v0.2.0  (<strike>Run in Pycharm</strike>)
+# Proxmox-load-balancer Pro v0.2.0  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
