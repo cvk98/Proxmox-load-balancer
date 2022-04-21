@@ -108,9 +108,9 @@ class Cluster:
         for item in temp:
             if item["type"] == "node":
                 self.cluster_information.remove(item)
-                item["cpu_used"] = round(item["maxcpu"] * item["cpu"], 2)  # Добавляем значение используемых ядер
-                item["free_mem"] = item["maxmem"] - item["mem"]  # Добавляем значение свободной ОЗУ
-                item["mem_load"] = item["mem"] / item["maxmem"]  # Добавляем значение свободной ОЗУ
+                item["cpu_used"] = round(item["maxcpu"] * item["cpu"], 2)  # Adding the value of the cores used
+                item["free_mem"] = item["maxmem"] - item["mem"]  # Adding the value of free RAM
+                item["mem_load"] = item["mem"] / item["maxmem"]  # Adding the RAM load value
                 nodes_dict[item["node"]] = item
                 if item["node"] not in excluded_nodes:
                     self.included_nodes[item["node"]] = item
