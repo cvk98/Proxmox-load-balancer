@@ -54,7 +54,8 @@ Moreover, it does not matter at all how much RAM the node has.
 				
 ```systemctl daemon-reload```  
 ```systemctl start load-balancer.service```  
-```systemctl status load-balancer.service```
+```systemctl status load-balancer.service```  
+```systemctl enable load-balancer.service```  
 
 <i>Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual</i>  
 **Before using the script, please read the Supplement to the license**
