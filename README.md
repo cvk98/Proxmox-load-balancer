@@ -42,7 +42,7 @@ Before using the script, please read the Supplement to the license
 1. All comments and messages are translated into English
 2. UTF-8 encoding throughout the document (tested on Ubuntu 20.04)
 
-# Tested on:
+# Running the script is tested on:
 1. PyCharm 2021+, Python 3.10+, Win10
 2. Proxmox LXC Ubuntu 20.04 (1 core, 256 MB, 5GB HDD), Python 3.8+
 
