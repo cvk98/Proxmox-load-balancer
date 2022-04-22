@@ -62,7 +62,7 @@ Moreover, it does not matter at all how much RAM the node has.
 
 # Changelog:
 ### 0.3.0 (22.04.2022)
-1. Added logging based on the loguru library (don't forget pip3 install loguru). Now logs can be viewed in the console or /var/log/syslog  
+1. Added logging based on the loguru library (don't forget `pip3 install loguru`). Now logs can be viewed in the console or /var/log/syslog  
 2. sys.exit() modes have been changed for the script to work correctly in daemon mode
 
 ### 0.2.0 (20.04.2022)
