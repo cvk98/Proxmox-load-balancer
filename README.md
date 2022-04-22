@@ -67,7 +67,7 @@ Moreover, it does not matter at all how much RAM the node has.
 
 ### 0.2.0 (20.04.2022)
 1. All comments and messages are translated into English
-2. UTF-8 encoding throughout the document (tested on Ubuntu 20.04)
+2. UTF-8 encoding throughout the document
 
 ##### Running the script is tested on:
 1. PyCharm 2021+, Python 3.10+, Win10
