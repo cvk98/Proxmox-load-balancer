@@ -1,4 +1,4 @@
-# Proxmox-load-balancer Pro v0.2.0  (<strike>Run in PyCharm</strike>)
+# Proxmox-load-balancer Pro v0.3.0  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -7,10 +7,9 @@
 4. <strike>Ca</strike>tch bugs
 5. <strike>Correct variable names</strike>
 6. <strike>Add comments</strike>
-7. Add logging and sending notifications to the mail
+7. <strike>Add logging </strike>and sending notifications to the mail
 8. <strike><b>Urgently translate into English</b></strike>
 9. <strike>Test on th</strike>ree clusters
-10. Write a service that will receive messages from the load balancer and log, send an email or telegram message (depending on the user settings)
 
 ![Excluded px-3](https://user-images.githubusercontent.com/88323643/164393540-9be1f695-59ba-4e96-a629-a9e9fd310795.jpg)
 
@@ -45,6 +44,7 @@ Moreover, it does not matter at all how much RAM the node has.
   		[Service]  
   		Type=simple  
   		User=USERNAME  
+		NoNewPrivileges=yes  
   		ExecStart=/home/USERNAME/plb.py  
   		Restart=always  
   		RestartSec=300  
@@ -61,11 +61,14 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.3.0 (22.04.2022)
+1. Added logging based on the loguru library (don't forget pip3 install loguru). Now logs can be viewed in the console or /var/log/syslog
+
 ### 0.2.0 (20.04.2022)
 1. All comments and messages are translated into English
 2. UTF-8 encoding throughout the document (tested on Ubuntu 20.04)
 
-### Running the script is tested on:
+##### Running the script is tested on:
 1. PyCharm 2021+, Python 3.10+, Win10
 2. Proxmox LXC Ubuntu 20.04 (1 core, 256 MB, 5GB HDD), Python 3.8+
 
