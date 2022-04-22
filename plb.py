@@ -214,7 +214,7 @@ def authentication(server: str, data: dict):
         get_token = requests.post(url, data=data, verify=False)
     except Exception as e:
         logger.exception(f'Incorrect server address or port settings: {e}')
-        sys.exit(1)  # TODO Add mail sending and logging
+        sys.exit(1)  # TODO Add mail sending
     if get_token.ok:
         logger.debug(f'Successful authentication. Response code: {get_token.status_code}')
     else:
