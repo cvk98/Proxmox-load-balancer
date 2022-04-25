@@ -1,4 +1,5 @@
 # Proxmox-load-balancer Pro v0.3.0  (<strike>Run in PyCharm</strike>)
+[![Total DL](https://img.shields.io/github/downloads/cvk98/Proxmox-load-balancer/v0.3.0-betta/total)](https://github.com/cvk98/Proxmox-load-balancer)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
