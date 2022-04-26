@@ -1,6 +1,4 @@
 # <p align="center">Proxmox-load-balancer Pro v0.3.0  (<strike>Run in PyCharm</strike>)
-[![License](https://img.shields.io/github/license/cvk98/Proxmox-load-balancer?color=%237FFFD4)](https://github.com/cvk98/Proxmox-load-balancer)
-[![Total DL](https://img.shields.io/github/downloads/cvk98/Proxmox-load-balancer/total)](https://github.com/cvk98/Proxmox-load-balancer)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
