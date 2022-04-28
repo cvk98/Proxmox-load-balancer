@@ -1,44 +1,47 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.4.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
 import urllib3
-from loguru import logger
-from copy import deepcopy
-from itertools import permutations
 from time import sleep
+from itertools import permutations
+from copy import deepcopy
+from bestconfig import Config
+from loguru import logger
 
-"""Proxmox node address and authorization information"""
-server_url = "https://10.10.2.222:8006"
-auth = {'username': "root@pam", 'password': "PASSWORD"}
+config = Config("config.yaml")  # Specify the path to the config
 
-"""Options"""
-deviation = 0.03          # Permissible deviation from the average load of the balanced part of the cluster (10% for 0.05)
-THRESHOLD = 0.9           # Dangerous loading threshold
-LXC_MIGRATION = "OFF"     # Container migration (LXCs are rebooted during migration!!!)
-migration_timeout = 1000  # For the future
+"""Proxmox"""
+server_url = f'https://{config.proxmox.url.ip}:{config.proxmox.url.port}'
+auth = dict(config.proxmox.auth)
 
-"""List of exclusions"""
-excluded_vms: tuple = ()    # Example: (100,) or (100, 101, 102, 113, 125, 131)
-excluded_nodes: tuple = ()  # Example: ('px-3',) or ('px-3', 'px-4', 'px-8', 'px-9')
+"""Parameters"""
+DEVIATION = config.parameters.deviation / 200
+THRESHOLD = config.parameters.threshold / 100
+LXC_MIGRATION = config.parameters.lxc_migration
+MIGRATION_TIMEOUT = config.parameters.migration_timeout
 
-"""Loguru settings"""
+"""Exclusions"""
+excluded_vms: tuple = config.exclusions.vms
+excluded_nodes: tuple = config.exclusions.nodes
+
+"""Loguru"""
 logger.remove()
 # For Linux service
-logger.add(sys.stdout, format="{level} | {message}", level="INFO")
+logger.add(sys.stdout, format="{level} | {message}", level=config.logging_level)
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
 # logger.add(sys.stdout,
 #            colorize=True,
 #            format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
 #                   "<level>{level}</level> | "
-#                   "<level>{message}</level>)",
-#            level="INFO",)
+#                   "<level>{message}</level>",
+#            level=config.logging_level)
 
-GB = 1e+9
-TB = 1e+12
+GB = config.Gigabyte
+TB = config.Terabyte
 
 logger.info("START ***Load-balancer!***")
 
@@ -248,12 +251,13 @@ def need_to_balance_checking(cluster_obj: object) -> bool:
         values["deviation"] = abs(values["mem_load"] - average)
     sum_of_deviations = sum(values["deviation"] for values in nodes.values())
     for values in nodes.values():
-        if values["deviation"] > deviation:
+        if values["deviation"] > DEVIATION:
             return True
     else:
         return False
 
 
+# TODO Переписать
 def temporary_dict(cluster_obj: object) -> object:
     """Preparation of information for subsequent processing"""
     logger.debug("Running temporary_dict")
@@ -315,7 +319,7 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             check_request = requests.get(url, cookies=payload, verify=False)
             local_disk = (check_request.json()['data']['local_disks'])
             local_resources = (check_request.json()['data']['local_resources'])
-        if local_disk or local_resources:
+        if local_disk or local_resources:  # TODO Logging
             continue  # for variant in variants:
         else:
             job = requests.post(url, cookies=payload, headers=header, data=options, verify=False)
