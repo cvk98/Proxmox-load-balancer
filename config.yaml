@@ -1,0 +1,28 @@
+# Proxmox node address and authorization information
+proxmox:
+  url:
+    ip: 10.10.20.223
+    port: 8006
+  auth:
+    username: "root@pam"
+    password: "PASSWORD"
+
+# Balancing Parameters
+parameters:
+  deviation: 4             # Percentage of allowable deviation of the RAM load of the node
+  threshold: 90            # Percentage of maximum load
+  lxc_migration: "OFF"     # Container migration (LXCs are rebooted during migration!!!)
+  migration_timeout: 1000  # For the future
+
+# List of exclusions
+exclusions:
+  vms: !!python/tuple []    # Example: [100] or [100, 101, 102, 113, 125, 131]
+  nodes: !!python/tuple []  # Example: [px-3] or [px-3, px-4, px-8, px-9]
+
+# Loguru settings
+logging_level: "INFO"  # You can choose "DEBUG" or "INFO" or "WARNING" or "ERROR"
+
+# Others
+Gigabyte: 1073741824
+Terabyte: 1099511627776
+
