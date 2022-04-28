@@ -1,4 +1,4 @@
-# <p align="center">Proxmox-load-balancer Pro v0.3.0  (<strike>Run in PyCharm</strike>)
+# <p align="center">Proxmox-load-balancer Pro v0.4.0  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -27,10 +27,10 @@ In particular:
 Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
 
 ### Recommendations:
-1. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 0.03. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 3% in a larger or smaller direction.
-Example: cluster load is 50%, the minimum loaded node is 47%, the maximum loaded node is 53%.
+1. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 4%. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 2% in a larger or smaller direction.
+Example: cluster load is 50%, the minimum loaded node is 48%, the maximum loaded node is 52%.
 Moreover, it does not matter at all how much RAM the node has.
-2. Do not set the "deviation" value to 0. This will result in a permanent VM migration at the slightest change to the VM["mem"]. The recommended minimum value is 0.01 for large clusters with many different VMs. For medium and small clusters 0.03-0.05+
+2. Do not set the "deviation" value to 0. This will result in a permanent VM migration at the slightest change to the VM["mem"]. The recommended minimum value is 1% for large clusters with many different VMs. For medium and small clusters 3-5%
 3. For the script to work correctly, you need constant access to the Proxmox host. Therefore, I recommend running the script on one of the Proxmox nodes or creating a VM/Lxc in a balanced cluster and configuring the script autorun.
 4. To autorun the script on Linux (ubuntu):  
 	 `touch /etc/systemd/system/load-balancer.service`  
@@ -61,6 +61,9 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.4.0 (28.04.22)  
+1. All settings are placed in the configuration file
+	
 ### 0.3.0 (22.04.2022)
 1. Added logging based on the loguru library (don't forget `pip3 install loguru`). Now logs can be viewed in the console or /var/log/syslog  
 2. sys.exit() modes have been changed for the script to work correctly in daemon mode
