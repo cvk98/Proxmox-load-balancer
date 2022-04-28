@@ -1,36 +1,38 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.4.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.4.1-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
 import urllib3
 from time import sleep
+import yaml
 from itertools import permutations
 from copy import deepcopy
-from bestconfig import Config
 from loguru import logger
 
-config = Config("config.yaml")  # Specify the path to the config
+with open("config.yaml", "r", encoding='utf8') as yaml_file:
+    cfg = yaml.safe_load(yaml_file)
 
 """Proxmox"""
-server_url = f'https://{config.proxmox.url.ip}:{config.proxmox.url.port}'
-auth = dict(config.proxmox.auth)
+server_url = f'https://{cfg["proxmox"]["url"]["ip"]}:{cfg["proxmox"]["url"]["port"]}'
+auth = dict(cfg["proxmox"]["auth"])
 
 """Parameters"""
-DEVIATION = config.parameters.deviation / 200
-THRESHOLD = config.parameters.threshold / 100
-LXC_MIGRATION = config.parameters.lxc_migration
-MIGRATION_TIMEOUT = config.parameters.migration_timeout
+DEVIATION = cfg["parameters"]["deviation"] / 200
+THRESHOLD = cfg["parameters"]["threshold"] / 100
+LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
+MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
 
 """Exclusions"""
-excluded_vms: tuple = config.exclusions.vms
-excluded_nodes: tuple = config.exclusions.nodes
+excluded_vms = tuple(cfg["exclusions"]["vms"])
+excluded_nodes = tuple(cfg["exclusions"]["nodes"])
+
 
 """Loguru"""
 logger.remove()
 # For Linux service
-logger.add(sys.stdout, format="{level} | {message}", level=config.logging_level)
+logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
 # logger.add(sys.stdout,
@@ -38,10 +40,10 @@ logger.add(sys.stdout, format="{level} | {message}", level=config.logging_level)
 #            format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
 #                   "<level>{level}</level> | "
 #                   "<level>{message}</level>",
-#            level=config.logging_level)
+#            level=cfg["logging_level"])
 
-GB = config.Gigabyte
-TB = config.Terabyte
+GB = cfg["Gigabyte"]
+TB = cfg["Terabyte"]
 
 logger.info("START ***Load-balancer!***")
 
