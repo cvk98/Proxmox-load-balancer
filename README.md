@@ -1,6 +1,6 @@
 # If you have problems with encoding due to the bestconfig library, then use version 0.3.0 of the balancer!
 
-## <p align="center">Proxmox-load-balancer Pro v0.4.0  (<strike>Run in PyCharm</strike>)
+## <p align="center">Proxmox-load-balancer Pro v0.4.1  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -63,7 +63,7 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
-### 0.4.0 (28.04.22)  
+### 0.4.1 (28.04.22)  
 1. All settings are placed in the configuration file
 	
 ### 0.3.0 (22.04.2022)
