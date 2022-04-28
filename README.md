@@ -76,7 +76,7 @@ Moreover, it does not matter at all how much RAM the node has.
 
 ##### Running the script is tested on:
 1. PyCharm 2021+, Python 3.10+, Win10
-2. Proxmox LXC Ubuntu 20.04 (1 core, 256 MB, 5GB HDD), Python 3.8+
+2. Proxmox LXC Ubuntu 20.04 (1 core, 256 MB, 5GB HDD), Python 3.8+ <strike>(0.4.0)</strike>
 
 **If you have any exceptions, please send them to my email. I'll try to help you.**
 
