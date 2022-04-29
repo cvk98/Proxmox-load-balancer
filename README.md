@@ -64,7 +64,11 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
-### 0.4.1 (28.04.22)  
+### 0.4.2 (29.04.22)  
+1. Removed bestconfig due to encoding issues  
+2. Added a check when opening the config	
+	
+### 0.4.0 (28.04.22)  
 1. All settings are placed in the configuration file (config.yaml)
 	
 ### 0.3.0 (22.04.2022)
