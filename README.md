@@ -65,7 +65,7 @@ Moreover, it does not matter at all how much RAM the node has.
 
 # Changelog:
 ### 0.4.1 (28.04.22)  
-1. All settings are placed in the configuration file
+1. All settings are placed in the configuration file (config.yaml)
 	
 ### 0.3.0 (22.04.2022)
 1. Added logging based on the loguru library (don't forget `pip3 install loguru`). Now logs can be viewed in the console or /var/log/syslog  
