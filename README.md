@@ -37,7 +37,7 @@ Moreover, it does not matter at all how much RAM the node has.
 4. To autorun the script on Linux (ubuntu):  
 	 `touch /etc/systemd/system/load-balancer.service`  
 	 `chmod 664 /etc/systemd/system/load-balancer.service`  
-		Add the following lines to it:  
+		Add the following lines to it, replacing USERNAME with the name of your Linux user:  
 			
 		[Unit]  
   		Description=Proxmor cluster load-balancer Service  
