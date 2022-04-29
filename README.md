@@ -1,6 +1,6 @@
 #### <p align="center"> If you have problems with encoding due to the bestconfig library, then use version 0.3.0 of the balancer!
 
-## Proxmox-load-balancer Pro v0.4.1  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.4.2  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
