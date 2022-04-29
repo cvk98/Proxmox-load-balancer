@@ -48,6 +48,7 @@ Moreover, it does not matter at all how much RAM the node has.
   		User=USERNAME  
 		NoNewPrivileges=yes  
   		ExecStart=/home/USERNAME/plb.py  
+		WorkingDirectory=/home/USERNAME/  
   		Restart=always  
   		RestartSec=300  
 
