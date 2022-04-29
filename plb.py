@@ -5,14 +5,18 @@
 import sys
 import requests
 import urllib3
-from time import sleep
 import yaml
+from time import sleep
 from itertools import permutations
 from copy import deepcopy
 from loguru import logger
 
-with open("config.yaml", "r", encoding='utf8') as yaml_file:
-    cfg = yaml.safe_load(yaml_file)
+try:
+    with open("config.yaml", "r", encoding='utf8') as yaml_file:
+        cfg = yaml.safe_load(yaml_file)
+except Exception as e:
+    logger.exception(f'Error opening the configuration file: {e}')
+    sys.exit(1)  # TODO Add mail sending
 
 """Proxmox"""
 server_url = f'https://{cfg["proxmox"]["url"]["ip"]}:{cfg["proxmox"]["url"]["port"]}'
