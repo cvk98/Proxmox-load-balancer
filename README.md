@@ -11,7 +11,8 @@
 6. <strike>Add comments</strike>
 7. <strike>Add logging </strike>and sending notifications to the mail
 8. <strike><b>Urgently translate into English</b></strike>
-9. <strike>Test on th</strike>ree clusters
+9. Add a VM selection algorithm for special cases when there is a need for migration, but there is no option that improves the balance	
+10. <strike>Test on th</strike>ree clusters
 
 ![Excluded px-3](https://user-images.githubusercontent.com/88323643/164393540-9be1f695-59ba-4e96-a629-a9e9fd310795.jpg)
 
