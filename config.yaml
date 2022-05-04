@@ -12,7 +12,7 @@ proxmox:
 parameters:
   deviation: 4             # Percentage of allowable deviation of the RAM load of the node
   threshold: 90            # Percentage of maximum load
-  lxc_migration: OFF     # Container migration (LXCs are rebooted during migration!!!)
+  lxc_migration: OFF       # Container migration (LXCs are rebooted during migration!!!)
   migration_timeout: 1000  # For the future
 
 # List of exclusions
