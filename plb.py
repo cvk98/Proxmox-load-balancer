@@ -1,22 +1,24 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.4.2-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.5.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
 import urllib3
 import yaml
+import smtplib
+from email.message import EmailMessage
 from time import sleep
 from itertools import permutations
 from copy import deepcopy
 from loguru import logger
 
 try:
-    with open("config.yaml", "r", encoding='utf8') as yaml_file:
+    with open("config1.yaml", "r", encoding='utf8') as yaml_file:
         cfg = yaml.safe_load(yaml_file)
 except Exception as e:
     logger.exception(f'Error opening the configuration file: {e}')
-    sys.exit(1)  # TODO Add mail sending
+    sys.exit(1)
 
 """Proxmox"""
 server_url = f'https://{cfg["proxmox"]["url"]["ip"]}:{cfg["proxmox"]["url"]["port"]}'
@@ -32,6 +34,8 @@ MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
 excluded_vms = tuple(cfg["exclusions"]["vms"])
 excluded_nodes = tuple(cfg["exclusions"]["nodes"])
 
+"""Mail"""
+send_on = cfg["mail"]["sending"]
 
 """Loguru"""
 logger.remove()
@@ -221,9 +225,11 @@ def authentication(server: str, data: dict):
     logger.debug('Authorization attempt...')
     try:
         get_token = requests.post(url, data=data, verify=False)
-    except Exception as e:
-        logger.exception(f'Incorrect server address or port settings: {e}')
-        sys.exit(1)  # TODO Add mail sending
+    except Exception as exc:
+        message = f'Incorrect server address or port settings: {exc}'
+        logger.exception(message)
+        send_mail(f'Proxmox node ({server_url}) is unavailable. Network or settings problem')
+        sys.exit(1)
     if get_token.ok:
         logger.debug(f'Successful authentication. Response code: {get_token.status_code}')
     else:
@@ -263,13 +269,13 @@ def need_to_balance_checking(cluster_obj: object) -> bool:
         return False
 
 
-# TODO Переписать
+# TODO Need to refactor
 def temporary_dict(cluster_obj: object) -> object:
     """Preparation of information for subsequent processing"""
     logger.debug("Running temporary_dict")
     obj = {}
     vm_dict = cluster_obj.cl_vms_included
-    if LXC_MIGRATION != "ON" or "on":
+    if not LXC_MIGRATION:
         for lxc in cluster_obj.cl_lxcs:
             del vm_dict[lxc]
     for host in cluster_obj.included_nodes:
@@ -311,11 +317,14 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
     local_resources = None
     clo = cluster_obj
     error_counter = 0
+    problems: list = []
     for variant in variants:
         if error_counter > 2:
             logger.exception(f'The number of migration errors has reached {error_counter} pieces.')
-            sys.exit(1)  # TODO Add logging and message sending
+            send_mail(f'Problems occurred during VM:{problems} migration. Check the VM status')
+            sys.exit(1)
         donor, recipient, vm = variant[:3]
+        logger.debug(f'VM:{vm} migration from {donor} to "recipient"')
         if vm in cluster_obj.cl_lxcs:
             options = {'target': recipient, 'restart': 1}
             url = f'{cluster_obj.server}/api2/json/nodes/{donor}/lxc/{vm}/migrate'
@@ -325,7 +334,8 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             check_request = requests.get(url, cookies=payload, verify=False)
             local_disk = (check_request.json()['data']['local_disks'])
             local_resources = (check_request.json()['data']['local_resources'])
-        if local_disk or local_resources:  # TODO Logging
+        if local_disk or local_resources:
+            logger.debug(f'The VM:{vm} has {local_disk if local_disk else local_resources if local_resources else ""}')
             continue  # for variant in variants:
         else:
             job = requests.post(url, cookies=payload, headers=header, data=options, verify=False)
@@ -336,6 +346,7 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             else:
                 logger.warning(f'Error when requesting migration VM {vm} from {donor} to {recipient}. Check the request.')
                 error_counter += 1
+                problems.append(vm)
                 continue  # for variant in variants:
             status = True
             timer: int = 0
@@ -350,12 +361,41 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
                         logger.info(f'{pid} - Completed!')
                         status = False
                         break  # for _ in running_vms:
-                    elif _['vmid'] == vm and _['status'] != 'running':  # TODO Send Message and Timeout
+                    elif _['vmid'] == vm and _['status'] != 'running':
+                        send_mail(f'Problems occurred during VM:{vm} migration. Check the VM status')
                         logger.exception(f'Something went wrong during the migration. Response code{request.status_code}')
                         sys.exit(1)
                 else:
                     logger.info(f'VM Migration: {vm}... {timer} sec.')
             break  # for variant in variants:
+
+
+def send_mail(message: str):
+    if send_on:
+        logger.debug("Starting send_mail")
+        email_content = message
+        msg = EmailMessage()
+        msg.set_payload(email_content)
+        msg['Subject'] = cfg["mail"]["message_subject"]
+        msg['From'] = cfg["mail"]["from"]
+        msg['To'] = cfg["mail"]["to"]
+        login: str = cfg["mail"]["login"]
+        password: str = cfg["mail"]["password"]
+        s = smtplib.SMTP(f'{cfg["mail"]["server"]["address"]}:{cfg["mail"]["server"]["port"]}')
+        encryption = cfg["mail"]["ssl_tls"]
+        if encryption:
+            s.starttls()
+        try:
+            s.login(login, password)
+            s.sendmail(msg['From'], [msg['To']], msg.as_string())
+            logger.trace('Notification sent')
+        except Exception as exc:
+            logger.debug(f'Problem when sending an email: {exc}')
+            logger.exception(f'The message has not been sent.Check the SMTP settings')
+        finally:
+            s.quit()
+    else:
+        pass
 
 
 def main():
