@@ -1,17 +1,18 @@
+# KEEP THE MARGINS AND FILE STRUCTURE!!!
 # Proxmox node address and authorization information
 proxmox:
   url:
-    ip: 10.10.20.223
+    ip: 10.10.20.222
     port: 8006
   auth:
-    username: "root@pam"
-    password: "PASSWORD"
+    username: 'root@pam'
+    password: 'PASSWORD'
 
 # Balancing Parameters
 parameters:
   deviation: 4             # Percentage of allowable deviation of the RAM load of the node
   threshold: 90            # Percentage of maximum load
-  lxc_migration: "OFF"     # Container migration (LXCs are rebooted during migration!!!)
+  lxc_migration: OFF     # Container migration (LXCs are rebooted during migration!!!)
   migration_timeout: 1000  # For the future
 
 # List of exclusions
@@ -20,10 +21,22 @@ exclusions:
   nodes: []  # Example: [px-3] or [px-3, px-4, px-8, px-9]
 
 # Loguru settings
-logging_level: "INFO"  # You can choose "DEBUG" or "INFO" or "WARNING" or "ERROR"
+logging_level: 'INFO'  # You can choose 'DEBUG" or "INFO" or "WARNING" or "ERROR"
+
+# Mail settings
+mail:
+  sending: OFF # ON or OFF (Enables/disables sending email)
+  message_subject: 'Load-balancer notification'
+  from: 'user@domain.com'
+  to: 'admin@domain.ru'
+  login: 'user' # Login options: login, domain\login, login@domain.com
+  password: 'MAIL_PASSWORD'
+  server:
+    address: 'mx.domain.com' # IP or address of your mail server
+    port: 25
+  ssl_tls: OFF # ON or OFF
 
 # Others
-Gigabyte: 1073741824
-Terabyte: 1099511627776
-
+Gigabyte: 1073741824 # 1e+9 for 10^9
+Terabyte: 1099511627776 # 1e+12 for 10^12
 
