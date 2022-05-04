@@ -14,7 +14,7 @@ from copy import deepcopy
 from loguru import logger
 
 try:
-    with open("config1.yaml", "r", encoding='utf8') as yaml_file:
+    with open("config.yaml", "r", encoding='utf8') as yaml_file:
         cfg = yaml.safe_load(yaml_file)
 except Exception as e:
     logger.exception(f'Error opening the configuration file: {e}')
