@@ -1,6 +1,6 @@
 #### <p align="center"> If you have problems with encoding due to the bestconfig library, then use version 0.3.0 of the balancer!
 
-## Proxmox-load-balancer Pro v0.4.2  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.5.0  (<strike>Run in PyCharm</strike>)
 
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
@@ -9,7 +9,7 @@
 4. <strike>Ca</strike>tch bugs
 5. <strike>Correct variable names</strike>
 6. <strike>Add comments</strike>
-7. <strike>Add logging </strike>and sending notifications to the mail
+7. <strike>Add logging and sending notifications to the mail</strike>
 8. <strike><b>Urgently translate into English</b></strike>
 9. Add a VM selection algorithm for special cases when there is a need for migration, but there is no option that improves the balance	
 10. <strike>Test on th</strike>ree clusters
@@ -65,6 +65,9 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.5.0 (04.05.22)  
+1. Added email notification about critical events  	
+	
 ### 0.4.2 (29.04.22)  
 1. Removed bestconfig due to encoding issues  
 2. Added a check when opening the config	
