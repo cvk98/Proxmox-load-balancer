@@ -391,7 +391,7 @@ def send_mail(message: str):
             logger.trace('Notification sent')
         except Exception as exc:
             logger.debug(f'Problem when sending an email: {exc}')
-            logger.exception(f'The message has not been sent.Check the SMTP settings')
+            logger.exception(f'The message has not been sent. Check the SMTP settings')
         finally:
             s.quit()
     else:
