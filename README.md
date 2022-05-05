@@ -88,6 +88,6 @@ Moreover, it does not matter at all how much RAM the node has.
 1. PyCharm 2021+, Python 3.10+, Win10
 2. Proxmox LXC Ubuntu 20.04 (1 core, 256 MB, 5GB HDD), Python 3.8+ <strike>(0.4.0)</strike>
 
-**If you have any exceptions, please send them to my email. I'll try to help you.**
+**If you have any exceptions, please write about them in https://github.com/cvk98/Proxmox-load-balancer/issues. I'll try to help you.**
 
 If you want to support the author, you can do it using <b>Etherium</b> by sending a donation to <b>0x1Ee280393C04c8534D36170BF47AD199742579C5</b>
