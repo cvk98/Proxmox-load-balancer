@@ -2,6 +2,8 @@
 
 ## Proxmox-load-balancer Pro v0.5.0  (<strike>Run in PyCharm</strike>)
 
+If you use this script and it works correctly - please do not be lazy to put a star. This motivates me very much to develop my product. If you lack some functions, write about it. I will try to add them if they fit into the product concept.
+	
 <strong>Development progress:</strong>
 1. <strike>Write a draft script</strike>
 2. <strike>Put "break" and "continue" in their places</strike>
