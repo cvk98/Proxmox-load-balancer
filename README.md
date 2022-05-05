@@ -30,12 +30,13 @@ In particular:
 Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
 
 ### Recommendations:
-1. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 4%. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 2% in a larger or smaller direction.
+1. For the migration mechanism to work correctly, a shared storage is required. This can be a CEPH (or other distributed storage) or a storage system connected to all Proxmox nodes.
+2. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 4%. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 2% in a larger or smaller direction.
 Example: cluster load is 50%, the minimum loaded node is 48%, the maximum loaded node is 52%.
 Moreover, it does not matter at all how much RAM the node has.
-2. Do not set the "deviation" value to 0. This will result in a permanent VM migration at the slightest change to the VM["mem"]. The recommended minimum value is 1% for large clusters with many different VMs. For medium and small clusters 3-5%
-3. For the script to work correctly, you need constant access to the Proxmox host. Therefore, I recommend running the script on one of the Proxmox nodes or creating a VM/Lxc in a balanced cluster and configuring the script autorun.
-4. To autorun the script on Linux (ubuntu):  
+3. Do not set the "deviation" value to 0. This will result in a permanent VM migration at the slightest change to the VM["mem"]. The recommended minimum value is 1% for large clusters with many different VMs. For medium and small clusters 3-5%
+4. For the script to work correctly, you need constant access to the Proxmox host. Therefore, I recommend running the script on one of the Proxmox nodes or creating a VM/Lxc in a balanced cluster and configuring the script autorun.
+5. To autorun the script on Linux (ubuntu):  
 	 `touch /etc/systemd/system/load-balancer.service`  
 	 `chmod 664 /etc/systemd/system/load-balancer.service`  
 		Add the following lines to it, replacing USERNAME with the name of your Linux user:  
