@@ -28,7 +28,7 @@ mail:
   sending: OFF # ON or OFF (Enables/disables sending email)
   message_subject: 'Load-balancer notification'
   from: 'user@domain.com'
-  to: 'admin@domain.ru'
+  to: 'admin@domain.com'
   login: 'user' # Login options: login, domain\login, login@domain.com
   password: 'MAIL_PASSWORD'
   server:
