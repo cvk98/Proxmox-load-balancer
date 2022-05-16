@@ -17,7 +17,7 @@ try:
     with open("config.yaml", "r", encoding='utf8') as yaml_file:
         cfg = yaml.safe_load(yaml_file)
 except Exception as e:
-    logger.exception(f'Error opening the configuration file: {e}')
+    print(f'Error opening the configuration file: {e}')
     sys.exit(1)
 
 """Proxmox"""
