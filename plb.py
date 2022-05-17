@@ -324,7 +324,7 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             send_mail(f'Problems occurred during VM:{problems} migration. Check the VM status')
             sys.exit(1)
         donor, recipient, vm = variant[:3]
-        logger.debug(f'VM:{vm} migration from {donor} to "recipient"')
+        logger.debug(f'VM:{vm} migration from {donor} to {recipient}')
         if vm in cluster_obj.cl_lxcs:
             options = {'target': recipient, 'restart': 1}
             url = f'{cluster_obj.server}/api2/json/nodes/{donor}/lxc/{vm}/migrate'
