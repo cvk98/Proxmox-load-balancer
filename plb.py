@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.5.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.5.1-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
 import urllib3
 import yaml
 import smtplib
+from random import random
 from email.message import EmailMessage
 from time import sleep
 from itertools import permutations
@@ -25,7 +26,7 @@ server_url = f'https://{cfg["proxmox"]["url"]["ip"]}:{cfg["proxmox"]["url"]["por
 auth = dict(cfg["proxmox"]["auth"])
 
 """Parameters"""
-DEVIATION = cfg["parameters"]["deviation"] / 200
+CONFIG_DEVIATION = CD = cfg["parameters"]["deviation"] / 200
 THRESHOLD = cfg["parameters"]["threshold"] / 100
 LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
 MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
@@ -50,6 +51,7 @@ logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 #                   "<level>{message}</level>",
 #            level=cfg["logging_level"])
 
+"""Constants"""
 GB = cfg["Gigabyte"]
 TB = cfg["Terabyte"]
 
@@ -57,9 +59,11 @@ logger.info("START ***Load-balancer!***")
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+"""Globals"""
 payload = dict()  # PVEAuthCookie
 header = dict()  # CSRFPreventionToken
 sum_of_deviations: float = 0
+iteration = 0
 
 
 class Cluster:
@@ -256,20 +260,26 @@ def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
 def need_to_balance_checking(cluster_obj: object) -> bool:
     """Checking the need for balancing"""
     logger.debug("Starting need_to_balance_checking")
-    global sum_of_deviations
+    global sum_of_deviations, iteration
     nodes = cluster_obj.included_nodes
     average = cluster_obj.mem_load_included
     for host, values in nodes.items():
         values["deviation"] = abs(values["mem_load"] - average)
     sum_of_deviations = sum(values["deviation"] for values in nodes.values())
+    if iteration > 10:
+        operational_deviation = CD/2 if random() > 1/3 else CD/4 if random() > 1/6 else CD/8
+        print(f'operational_deviation changed to {operational_deviation}')
+        logger.debug(f'operational_deviation changed to {operational_deviation}')
+        iteration = 0
+    else:
+        operational_deviation = CONFIG_DEVIATION
     for values in nodes.values():
-        if values["deviation"] > DEVIATION:
+        if values["deviation"] > operational_deviation:
             return True
     else:
         return False
 
 
-# TODO Need to refactor
 def temporary_dict(cluster_obj: object) -> object:
     """Preparation of information for subsequent processing"""
     logger.debug("Running temporary_dict")
@@ -400,6 +410,7 @@ def send_mail(message: str):
 
 def main():
     """The main body of the program"""
+    global iteration
     authentication(server_url, auth)
     cluster = Cluster(server_url)
     cluster_load_verification(cluster.mem_load_included, cluster)
@@ -412,8 +423,11 @@ def main():
             vm_migration(sorted_variants, cluster)
             logger.info('Waiting 10 seconds for cluster information update')
             sleep(10)
+        else:
+            pass  # TODO Aggressive algorithm
     else:
         logger.info('The cluster is balanced. Waiting 300 seconds.')
+        iteration += 1
         sleep(300)
 
 
