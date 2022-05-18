@@ -268,7 +268,6 @@ def need_to_balance_checking(cluster_obj: object) -> bool:
     sum_of_deviations = sum(values["deviation"] for values in nodes.values())
     if iteration > 10:
         operational_deviation = CD/2 if random() > 1/3 else CD/4 if random() > 1/6 else CD/8
-        print(f'operational_deviation changed to {operational_deviation}')
         logger.debug(f'operational_deviation changed to {operational_deviation}')
         iteration = 0
     else:
