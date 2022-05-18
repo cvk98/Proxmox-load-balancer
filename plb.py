@@ -417,6 +417,7 @@ def main():
     need_to_balance = need_to_balance_checking(cluster)
     logger.info(f'Need to balance: {need_to_balance}')
     if need_to_balance:
+        iteration = 0
         balance_cl = temporary_dict(cluster)
         sorted_variants = calculating(balance_cl, cluster)
         if sorted_variants:
