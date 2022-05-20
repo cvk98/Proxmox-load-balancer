@@ -244,7 +244,7 @@ def authentication(server: str, data: dict):
     header = {'CSRFPreventionToken': (get_token.json()['data']['CSRFPreventionToken'])}
 
 
-def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
+def cluster_load_verification(mem_load: float, cluster_obj: object) -> bool:
     """Checking the RAM load of the balanced part of the cluster"""
     logger.debug("Starting cluster_load_verification")
     if len(cluster_obj.cl_nodes) - len(excluded_nodes) == 1:
@@ -254,7 +254,8 @@ def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
     if mem_load >= THRESHOLD:
         logger.warning(f'Cluster RAM usage is too high {(round(cluster_obj.mem_load * 100, 2))}')
         logger.warning('It is not possible to safely balance the cluster')
-        sys.exit(1)
+        return False
+    return True
 
 
 def need_to_balance_checking(cluster_obj: object) -> bool:
@@ -412,7 +413,11 @@ def main():
     global iteration
     authentication(server_url, auth)
     cluster = Cluster(server_url)
-    cluster_load_verification(cluster.mem_load_included, cluster)
+    verification_status = cluster_load_verification(cluster.mem_load_included, cluster)
+    if verification_status == False:
+        logger.warning('Cluster health verification failed. Waiting 300 seconds.')
+        sleep(300)
+        return
     need_to_balance = need_to_balance_checking(cluster)
     logger.info(f'Need to balance: {need_to_balance}')
     if need_to_balance:
