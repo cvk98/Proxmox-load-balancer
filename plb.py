@@ -254,6 +254,7 @@ def cluster_load_verification(mem_load: float, cluster_obj: object) -> bool:
     if mem_load >= THRESHOLD:
         logger.warning(f'Cluster RAM usage is too high {(round(cluster_obj.mem_load * 100, 2))}')
         logger.warning('It is not possible to safely balance the cluster')
+        send_mail(f'Cluster RAM usage is too high {(round(cluster_obj.mem_load * 100, 2))}')
         return False
     return True
 
