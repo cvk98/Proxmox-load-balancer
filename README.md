@@ -1,6 +1,6 @@
 #### <p align="center"> If you have problems with encoding due to the bestconfig library, then use version 0.3.0 of the balancer!
 
-## Proxmox-load-balancer Pro v0.5.2  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.6.0  (<strike>Run in PyCharm</strike>)
 
 If you use this script and it works correctly - please do not be lazy to put a star. This motivates me very much to develop my product. If you lack some functions, write about it. I will try to add them if they fit into the product concept.
 	
@@ -68,6 +68,9 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.6.0 (23.05.22)
+1. Added a mechanism for checking the launch of the load balancer on the HA cluster master node (thanks to Cylindrical)
+	
 ### 0.5.2 (20.05.22)  
 1. Minor improvements suggested by Cylindric regarding cluster health check
 
