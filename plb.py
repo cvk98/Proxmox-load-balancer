@@ -43,15 +43,15 @@ send_on = cfg["mail"]["sending"]
 """Loguru"""
 logger.remove()
 # For Linux service
-#logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
+logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
-logger.add(sys.stdout,
-           colorize=True,
-           format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
-                  "<level>{level}</level> | "
-                  "<level>{message}</level>",
-           level=cfg["logging_level"])
+#logger.add(sys.stdout,
+#           colorize=True,
+#           format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
+#                  "<level>{level}</level> | "
+#                  "<level>{message}</level>",
+#           level=cfg["logging_level"])
 
 """Constants"""
 GB = cfg["Gigabyte"]
