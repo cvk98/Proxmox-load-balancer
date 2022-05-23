@@ -31,7 +31,7 @@ CONFIG_DEVIATION = CD = cfg["parameters"]["deviation"] / 200
 THRESHOLD = cfg["parameters"]["threshold"] / 100
 LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
 MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
-ONLY_ON_MASTER = cfg["parameters"]["only_on_master"]
+ONLY_ON_MASTER = cfg["parameters"].get("only_on_master", False)
 
 """Exclusions"""
 excluded_vms = tuple(cfg["exclusions"]["vms"])
@@ -452,6 +452,7 @@ def main():
         logger.warning('Cluster health verification failed. Waiting 300 seconds.')
         sleep(300)
         return
+
     need_to_balance = need_to_balance_checking(cluster)
     logger.info(f'Need to balance: {need_to_balance}')
     if need_to_balance:
