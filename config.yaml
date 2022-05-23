@@ -14,7 +14,6 @@ parameters:
   threshold: 90            # Percentage of maximum load
   lxc_migration: OFF       # Container migration (LXCs are rebooted during migration!!!)
   migration_timeout: 1000  # For the future
-  only_on_master: OFF      # Only run PLB on the current cluster master
 
 # List of exclusions
 exclusions:
