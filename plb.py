@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.5.2-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.6.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
 import urllib3
 import yaml
 import smtplib
+import socket
 from random import random
 from email.message import EmailMessage
 from time import sleep
@@ -30,6 +31,7 @@ CONFIG_DEVIATION = CD = cfg["parameters"]["deviation"] / 200
 THRESHOLD = cfg["parameters"]["threshold"] / 100
 LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
 MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
+ONLY_ON_MASTER = cfg["parameters"].get("only_on_master", False)
 
 """Exclusions"""
 excluded_vms = tuple(cfg["exclusions"]["vms"])
@@ -41,15 +43,15 @@ send_on = cfg["mail"]["sending"]
 """Loguru"""
 logger.remove()
 # For Linux service
-logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
+#logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
-# logger.add(sys.stdout,
-#            colorize=True,
-#            format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
-#                   "<level>{level}</level> | "
-#                   "<level>{message}</level>",
-#            level=cfg["logging_level"])
+logger.add(sys.stdout,
+           colorize=True,
+           format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
+                  "<level>{level}</level> | "
+                  "<level>{message}</level>",
+           level=cfg["logging_level"])
 
 """Constants"""
 GB = cfg["Gigabyte"]
@@ -72,6 +74,8 @@ class Cluster:
         """Cluster"""
         self.server: str = server
         self.cl_name = self.cluster_name()
+        self.master_node: str = None
+        self.quorate: bool = False
         """VMs and nodes"""
         self.cl_nodes: int = 0                      # The number of nodes. Calculated in Cluster.cluster_name
         self.cluster_information = {}               # Retrieved in Cluster.cluster_items
@@ -136,6 +140,25 @@ class Cluster:
         """Getting nodes from cluster resources"""
         logger.debug("Launching Cluster.cluster_hosts")
         nodes_dict = {}
+
+        # Find out which node is the current cluster master
+        url = f'{self.server}/api2/json/cluster/ha/status/manager_status'
+        logger.debug('Attempt to get information about the cluster HA manager...')
+        resources_request = rr = requests.get(url, cookies=payload, verify=False)
+        if resources_request.ok:
+            logger.debug(f'Information about the cluster HA Manager has been received. Response code: {rr.status_code}')
+        else:
+            logger.warning(f'Execution error {Cluster.cluster_items.__qualname__}')
+            logger.warning(
+                f'Could not get information about the HA cluster manager. Response code: {rr.status_code}. Reason: ({rr.reason})')
+            sys.exit(0)
+
+        self.master_node = rr.json()['data']['manager_status']['master_node']
+        self.quorate = (rr.json()['data']['quorum']['quorate'] == "1")
+        if self.quorate == False:
+            # This is probably an error condition that should cause a "try again later"
+            logger.warning(f'Quorum is currently not quorate!')
+
         temp = deepcopy(self.cluster_information)
         for item in temp:
             if item["type"] == "node":
@@ -143,7 +166,9 @@ class Cluster:
                 item["cpu_used"] = round(item["maxcpu"] * item["cpu"], 2)   # Adding the value of the cores used
                 item["free_mem"] = item["maxmem"] - item["mem"]             # Adding the value of free RAM
                 item["mem_load"] = item["mem"] / item["maxmem"]             # Adding the RAM load value
+                item["is_master"] = (item["node"] == self.master_node)      # Flagging the current master node
                 nodes_dict[item["node"]] = item
+
                 if item["node"] not in excluded_nodes:
                     self.included_nodes[item["node"]] = item
         del temp
@@ -244,7 +269,7 @@ def authentication(server: str, data: dict):
     header = {'CSRFPreventionToken': (get_token.json()['data']['CSRFPreventionToken'])}
 
 
-def cluster_load_verification(mem_load: float, cluster_obj: object) -> bool:
+def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
     """Checking the RAM load of the balanced part of the cluster"""
     logger.debug("Starting cluster_load_verification")
     if len(cluster_obj.cl_nodes) - len(excluded_nodes) == 1:
@@ -254,9 +279,7 @@ def cluster_load_verification(mem_load: float, cluster_obj: object) -> bool:
     if mem_load >= THRESHOLD:
         logger.warning(f'Cluster RAM usage is too high {(round(cluster_obj.mem_load * 100, 2))}')
         logger.warning('It is not possible to safely balance the cluster')
-        send_mail(f'Cluster RAM usage is too high {(round(cluster_obj.mem_load * 100, 2))}')
-        return False
-    return True
+        sys.exit(1)
 
 
 def need_to_balance_checking(cluster_obj: object) -> bool:
@@ -414,11 +437,15 @@ def main():
     global iteration
     authentication(server_url, auth)
     cluster = Cluster(server_url)
-    verification_status = cluster_load_verification(cluster.mem_load_included, cluster)
-    if verification_status == False:
-        logger.warning('Cluster health verification failed. Waiting 300 seconds.')
-        sleep(300)
-        return
+    if ONLY_ON_MASTER:
+        hostname = socket.gethostname()
+        master = cluster.master_node
+        if hostname != master:
+            logger.info(
+                f'This server ({hostname}) is not the current cluster master, {master} is. Waiting 300 seconds.')
+            sleep(300)
+            return
+    cluster_load_verification(cluster.mem_load_included, cluster)
     need_to_balance = need_to_balance_checking(cluster)
     logger.info(f'Need to balance: {need_to_balance}')
     if need_to_balance:
@@ -430,6 +457,7 @@ def main():
             logger.info('Waiting 10 seconds for cluster information update')
             sleep(10)
         else:
+            sleep(60)
             pass  # TODO Aggressive algorithm
     else:
         logger.info('The cluster is balanced. Waiting 300 seconds.')
