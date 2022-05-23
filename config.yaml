@@ -2,7 +2,7 @@
 # Proxmox node address and authorization information
 proxmox:
   url:
-    ip: 10.10.20.222
+    ip: 127.0.0.1
     port: 8006
   auth:
     username: 'root@pam'
