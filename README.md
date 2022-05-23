@@ -27,7 +27,8 @@ In particular:
 2. It is now possible to disable LXC migration.
 3. You can set the spread range of node loading, at which there is no balancing.
 4. The VM selection algorithm for migration has been significantly redesigned (other criteria for evaluating the proposed migration options).
-5. This script works constantly and does not finish its work when the balance is reached. Just falls asleep for 5 minutes (can be changed)
+5. This script works constantly and does not finish its work when the balance is reached. Just falls asleep for 5 minutes (can be changed).  
+6. Now the script can be deployed automatically (via ansible) to all nodes of the cluster using HA. To do this, install only_on_master: ON in the config. Then it will run only on the master node.
 
 Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
 
