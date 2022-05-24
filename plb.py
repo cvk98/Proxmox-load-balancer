@@ -441,8 +441,7 @@ def main():
         hostname = socket.gethostname()
         master = cluster.master_node
         if hostname != master:
-            logger.info(
-                f'This server ({hostname}) is not the current cluster master, {master} is. Waiting 300 seconds.')
+            logger.info(f'This server ({hostname}) is not the current cluster master, {master} is. Waiting 300 seconds.')
             sleep(300)
             return
     cluster_load_verification(cluster.mem_load_included, cluster)
