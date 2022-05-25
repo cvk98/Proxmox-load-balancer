@@ -155,7 +155,7 @@ class Cluster:
 
         self.master_node = rr.json()['data']['manager_status']['master_node']
         self.quorate = (rr.json()['data']['quorum']['quorate'] == "1")
-        if self.quorate == False:
+        if not self.quorate:
             # This is probably an error condition that should cause a "try again later"
             logger.warning(f'Quorum is currently not quorate!')
 
