@@ -74,7 +74,7 @@ class Cluster:
         """Cluster"""
         self.server: str = server
         self.cl_name = self.cluster_name()
-        self.master_node: str = None
+        self.master_node: str = ""
         self.quorate: bool = False
         """VMs and nodes"""
         self.cl_nodes: int = 0                      # The number of nodes. Calculated in Cluster.cluster_name
