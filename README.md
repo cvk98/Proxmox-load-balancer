@@ -1,4 +1,4 @@
-## Proxmox-load-balancer Pro v0.6.0  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.6.1  (<strike>Run in PyCharm</strike>)
 
 If you use this script and it works correctly - please do not be lazy to put a star. This motivates me very much to develop my product. If you lack some functions, write about it. I will try to add them if they fit into the product concept.
 	
@@ -67,6 +67,11 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.6.1 (22.06.22)
+1. Added the "resume" operation 10 seconds after VM migration. Since sometimes the following situation occurs:
+  
+  ![image](https://user-images.githubusercontent.com/88323643/175003454-eb7014c7-b6be-401b-9420-956487be0034.png)  
+
 ### 0.6.0 (23.05.22)
 1. Added a mechanism for checking the launch of the load balancer on the HA cluster master node (thanks to Cylindrical)
 	
