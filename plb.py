@@ -42,7 +42,7 @@ send_on = cfg["mail"]["sending"]
 
 """Loguru"""
 logger.remove()
-For Linux service
+# For Linux service
 logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
