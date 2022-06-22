@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.6.0-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.6.1-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
@@ -43,15 +43,15 @@ send_on = cfg["mail"]["sending"]
 """Loguru"""
 logger.remove()
 # For Linux service
-logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
+# logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
 
 # For Windows and linux window mode (you can change sys.stdout to "file.log")
-#logger.add(sys.stdout,
-#           colorize=True,
-#           format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
-#                  "<level>{level}</level> | "
-#                  "<level>{message}</level>",
-#           level=cfg["logging_level"])
+logger.add(sys.stdout,
+           colorize=True,
+           format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
+                  "<level>{level}</level> | "
+                  "<level>{message}</level>",
+           level=cfg["logging_level"])
 
 """Constants"""
 GB = cfg["Gigabyte"]
@@ -393,6 +393,10 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
                 for _ in running_vms:
                     if _['vmid'] == vm and _['status'] == 'running':
                         logger.info(f'{pid} - Completed!')
+                        sleep(10)
+                        url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/qemu/{vm}/status/resume'
+                        request = requests.post(url, cookies=payload, headers=header, verify=False)
+                        logger.debug(f'Resuming {vm} after {pid}: {request.ok}')
                         status = False
                         break  # for _ in running_vms:
                     elif _['vmid'] == vm and _['status'] != 'running':
@@ -441,7 +445,8 @@ def main():
         hostname = socket.gethostname()
         master = cluster.master_node
         if hostname != master:
-            logger.info(f'This server ({hostname}) is not the current cluster master, {master} is. Waiting 300 seconds.')
+            logger.info(
+                f'This server ({hostname}) is not the current cluster master, {master} is. Waiting 300 seconds.')
             sleep(300)
             return
     cluster_load_verification(cluster.mem_load_included, cluster)
