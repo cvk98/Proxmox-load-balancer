@@ -32,6 +32,8 @@ In particular:
 
 Most likely, the script does not need a root PVE account. You can create a separate account with the necessary rights (not tested). But for those who are worried that the script may harm your cluster, I can say that there is only one POST method used for VM/LXC migration.
 
+### Does not take into account the recommendations of HA!
+
 ### Recommendations:
 1. **For the migration mechanism to work correctly, a shared storage is required. This can be a CEPH (or other distributed storage) or a storage system connected to all Proxmox nodes.**
 2. For a cluster similar in size and composition to the one in the screenshot, the normal value of "deviation" is 4%. This means that with an average load of the cluster (or part of it) the maximum deviation of the RAM load of each node can be 2% in a larger or smaller direction.
