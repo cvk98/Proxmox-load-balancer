@@ -18,7 +18,7 @@ parameters:
 
 # List of exclusions
 exclusions:
-  vms: []    # Example: [100] or [100, 101, 102, 113, 125, 131]
+  vms: []    # Example: [100] or [100, 101, 102, 113, 125, 131] or ["100-200", 300, 301]
   nodes: []  # Example: [px-3] or [px-3, px-4, px-8, px-9]
 
 # Loguru settings
