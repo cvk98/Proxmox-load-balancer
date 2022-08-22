@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.6.1-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.6.2-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
