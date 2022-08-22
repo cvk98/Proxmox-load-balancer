@@ -34,8 +34,19 @@ MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
 ONLY_ON_MASTER = cfg["parameters"].get("only_on_master", False)
 
 """Exclusions"""
-excluded_vms = tuple(cfg["exclusions"]["vms"])
+excluded_vms = []
+
+for x in tuple(cfg["exclusions"]["vms"]):
+    if isinstance(x, int):
+        excluded_vms.append(x)
+    elif "-" in x:
+        r = tuple(x.split("-"))
+        excluded_vms.extend(range(int(r[0]), int(r[1]) + 1))
+    else:
+        excluded_vms.append(int(x))
+
 excluded_nodes = tuple(cfg["exclusions"]["nodes"])
+
 
 """Mail"""
 send_on = cfg["mail"]["sending"]
