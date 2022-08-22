@@ -1,4 +1,4 @@
-## Proxmox-load-balancer Pro v0.6.1  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.6.2  (<strike>Run in PyCharm</strike>)
 
 ## Please take a look: https://github.com/cvk98/Proxmox-load-balancer/issues/7
 
@@ -67,10 +67,13 @@ Moreover, it does not matter at all how much RAM the node has.
 ```systemctl status load-balancer.service```  
 ```systemctl enable load-balancer.service```  
 
-<i>Tested on Proxmox Virtual Environment 7.1-10 with 400+ virtual</i>  
+<i>Tested on Proxmox 7.1-10 virtual environment with more than 400 virtual machines</i>  
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.6.2 (22.08.22)  
+1. Add range generation for vm exclusion (thanks to Azerothian)  
+
 ### 0.6.1 (22.06.22)
 1. Added the "resume" operation 10 seconds after VM migration. Since sometimes the following situation occurs:
   
