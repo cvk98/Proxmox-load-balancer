@@ -383,9 +383,10 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             logger.debug(f'The VM:{vm} has {local_disk if local_disk else local_resources if local_resources else ""}')
             continue  # for variant in variants:
         else:
+            # request migration
             job = requests.post(url, cookies=payload, headers=header, data=options, verify=False)
             if job.ok:
-                logger.info(f'Migration VM:{vm} ({round(clo.cl_vms[vm]["mem"] / GB, 2)} GB) from {donor} to {recipient}...')
+                logger.info(f'Migration VM:{vm} ({round(clo.cl_vms[vm]["mem"] / GB, 2)} GB mem) from {donor} to {recipient}...')
                 pid = job.json()['data']
                 error_counter -= 1
             else:
@@ -395,27 +396,31 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
                 continue  # for variant in variants:
             status = True
             timer: int = 0
-            while status:
+            while status: # confirm the migration is done
                 timer += 10
                 sleep(10)
-                url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/qemu'
+                if vm in cluster_obj.cl_lxcs:
+                    url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/lxc'
+                else:
+                    url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/qemu'
                 request = requests.get(url, cookies=payload, verify=False)
-                running_vms = request.json()['data']
-                for _ in running_vms:
-                    if _['vmid'] == vm and _['status'] == 'running':
+                recipient_vms = request.json()['data']
+                for _ in recipient_vms:
+                    if int(_['vmid']) == vm and _['status'] == 'running':
                         logger.info(f'{pid} - Completed!')
                         sleep(10)
-                        url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/qemu/{vm}/status/resume'
-                        request = requests.post(url, cookies=payload, headers=header, verify=False)
-                        logger.debug(f'Resuming {vm} after {pid}: {request.ok}')
+                        if vm in cluster_obj.cl_vms:
+                            url = f'{cluster_obj.server}/api2/json/nodes/{recipient}/qemu/{vm}/status/resume'
+                            request = requests.post(url, cookies=payload, headers=header, verify=False)
+                            logger.debug(f'Resuming {vm} after {pid}: {request.ok}')
                         status = False
-                        break  # for _ in running_vms:
+                        break  # for _ in recipient_vms:
                     elif _['vmid'] == vm and _['status'] != 'running':
                         send_mail(f'Problems occurred during VM:{vm} migration. Check the VM status')
                         logger.exception(f'Something went wrong during the migration. Response code{request.status_code}')
                         sys.exit(1)
-                else:
-                    logger.info(f'VM Migration: {vm}... {timer} sec.')
+                    else:
+                        logger.info(f'VM Migration: {vm}... {timer} sec.')
             break  # for variant in variants:
 
 
