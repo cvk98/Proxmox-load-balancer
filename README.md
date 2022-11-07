@@ -1,4 +1,4 @@
-## Proxmox-load-balancer Pro v0.6.2  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.6.3  (<strike>Run in PyCharm</strike>)
 
 ## Please take a look: https://github.com/cvk98/Proxmox-load-balancer/issues/7
 
@@ -71,8 +71,13 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+### 0.6.3 (07.11.22)  
+1. fix bug with lxc migration (thanks to MarcMocker) 
+https://github.com/cvk98/Proxmox-load-balancer/pull/11
+
 ### 0.6.2 (22.08.22)  
-1. Add range generation for vm exclusion (thanks to Azerothian)  
+1. Add range generation for vm exclusion (thanks to Azerothian)
+https://github.com/cvk98/Proxmox-load-balancer/pull/9
 
 ### 0.6.1 (22.06.22)
 1. Added the "resume" operation 10 seconds after VM migration. Since sometimes the following situation occurs:
@@ -81,6 +86,7 @@ Moreover, it does not matter at all how much RAM the node has.
 
 ### 0.6.0 (23.05.22)
 1. Added a mechanism for checking the launch of the load balancer on the HA cluster master node (thanks to Cylindrical)
+https://github.com/cvk98/Proxmox-load-balancer/pull/3
 	
 ### 0.5.2 (20.05.22)  
 1. Minor improvements suggested by Cylindric regarding cluster health check
