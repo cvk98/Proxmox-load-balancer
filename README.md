@@ -1,4 +1,4 @@
-## Proxmox-load-balancer Pro v0.6.3  (<strike>Run in PyCharm</strike>)
+## Proxmox-load-balancer Pro v0.6.3  
 
 ## Please take a look: https://github.com/cvk98/Proxmox-load-balancer/issues/7
 
