@@ -174,6 +174,8 @@ class Cluster:
         for item in temp:
             if item["type"] == "node":
                 self.cluster_information.remove(item)
+                if item["status"] != "online":                              # Ignore nodes that are not online
+                    continue
                 item["cpu_used"] = round(item["maxcpu"] * item["cpu"], 2)   # Adding the value of the cores used
                 item["free_mem"] = item["maxmem"] - item["mem"]             # Adding the value of free RAM
                 item["mem_load"] = item["mem"] / item["maxmem"]             # Adding the RAM load value
