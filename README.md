@@ -1,4 +1,4 @@
-## Proxmox-load-balancer Pro v0.6.3  
+## Proxmox-load-balancer Pro v0.6.4  
 
 ## Please take a look: https://github.com/cvk98/Proxmox-load-balancer/issues/7
 
@@ -71,6 +71,12 @@ Moreover, it does not matter at all how much RAM the node has.
 **Before using the script, please read the Supplement to the license**
 
 # Changelog:
+
+### 0.6.4 (21.03.23)  
+1. fix of an error that occurs when nodes are turned off (thanks to dmitry-ko) 
+https://github.com/cvk98/Proxmox-load-balancer/pull/14
+
+
 ### 0.6.3 (07.11.22)  
 1. fix bug with lxc migration (thanks to MarcMocker) 
 https://github.com/cvk98/Proxmox-load-balancer/pull/11
