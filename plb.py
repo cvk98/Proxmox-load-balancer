@@ -383,6 +383,9 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             local_resources = (check_request.json()['data']['local_resources'])
         if local_disk or local_resources:
             logger.debug(f'The VM:{vm} has {local_disk if local_disk else local_resources if local_resources else ""}')
+            # local_disk & Local_resource need to be reset after the check (if we start with a unmovable VM, the rest are never tested)
+            local_disk = None
+            local_resources = None
             continue  # for variant in variants:
         else:
             # request migration
