@@ -124,4 +124,4 @@ https://github.com/cvk98/Proxmox-load-balancer/pull/3
 
 **If you have any exceptions, please write about them in https://github.com/cvk98/Proxmox-load-balancer/issues. I'll try to help you.**
 
-If you want to support the author, you can do it using <b>Etherium</b> by sending a donation to <b>0x1Ee280393C04c8534D36170BF47AD199742579C5</b>
+
