@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.6.4-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+__author__ = 'github.com/cvk98'
+__version__ = "0.6.5-betta"
 
 import sys
 import requests
@@ -14,9 +15,16 @@ from time import sleep
 from itertools import permutations
 from copy import deepcopy
 from loguru import logger
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-v', action='version', version='%(prog)s v{version} by {author}'.format(version=__version__, author=__author__))
+parser.add_argument('-c',dest="filename", type=str,  default="config.yaml", help='Yaml configuration file', metavar="FILE")
+
+args = parser.parse_args()
 
 try:
-    with open("config.yaml", "r", encoding='utf8') as yaml_file:
+    with open(args.filename, "r", encoding='utf8') as yaml_file:
         cfg = yaml.safe_load(yaml_file)
 except Exception as e:
     print(f'Error opening the configuration file: {e}')
@@ -53,16 +61,12 @@ send_on = cfg["mail"]["sending"]
 
 """Loguru"""
 logger.remove()
-# For Linux service
-logger.add(sys.stdout, format="{level} | {message}", level=cfg["logging_level"])
-
-# For Windows and linux window mode (you can change sys.stdout to "file.log")
-# logger.add(sys.stdout,
-#            colorize=True,
-#            format="<green>{time:YYYY-MM-DD at HH:mm:ss}</green> | "
-#                   "<level>{level}</level> | "
-#                   "<level>{message}</level>",
-#            level=cfg["logging_level"])
+if cfg["logging"]["output"] == "stdout":
+    logger.add(sys.stdout,
+               level=cfg["logging"]["level"], format=cfg["logging"]["format"])
+else:
+    logger.add(["logging"]["output"],
+               level=cfg["logging"]["level"], rotation=cfg["logging"]["rotation"], retention=cfg["logging"]["retention"], format=cfg["logging"]["format"])
 
 """Constants"""
 GB = cfg["Gigabyte"]
