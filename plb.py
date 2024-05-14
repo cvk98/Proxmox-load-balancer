@@ -445,7 +445,8 @@ def send_mail(message: str):
         if encryption:
             s.starttls()
         try:
-            s.login(login, password)
+            if login and password:
+                s.login(login, password)
             s.sendmail(msg['From'], [msg['To']], msg.as_string())
             logger.trace('Notification sent')
         except Exception as exc:
