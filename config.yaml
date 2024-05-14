@@ -10,8 +10,10 @@ proxmox:
 
 # Balancing Parameters
 parameters:
-  deviation: 4             # Percentage of allowable deviation of the RAM load of the node
+  mem_deviation: 4 # Percentage of allowable deviation of the RAM load of the node
   threshold: 90            # Percentage of maximum load
+  cpu_deviation: 1 # Percentage of allowable deviation of the CPU load of the node
+  cpu_deviation_duration_seconds: 20 # Time of allowable duration of the CPU exceed deviation
   lxc_migration: OFF       # Container migration (LXCs are rebooted during migration!!!)
   migration_timeout: 1000  # For the future
   only_on_master: OFF      # Only run PLB on the current cluster master
