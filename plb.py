@@ -378,9 +378,13 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
         else:
             options = {'target': recipient, 'online': 1}
             url = f'{cluster_obj.server}/api2/json/nodes/{donor}/qemu/{vm}/migrate'
-            check_request = requests.get(url, cookies=payload, verify=False)
-            local_disk = (check_request.json()['data']['local_disks'])
-            local_resources = (check_request.json()['data']['local_resources'])
+            check_request = requests.get(url, cookies=payload, verify=False).json()
+            if not check_request['data']:
+                logger.warning(f'VM:{vm} is not migratable')
+                continue
+
+            local_disk = (check_request['data']['local_disks'])
+            local_resources = (check_request['data']['local_resources'])
         if local_disk or local_resources:
             logger.debug(f'The VM:{vm} has {local_disk if local_disk else local_resources if local_resources else ""}')
             # local_disk & Local_resource need to be reset after the check (if we start with a unmovable VM, the rest are never tested)
