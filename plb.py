@@ -285,8 +285,8 @@ def authentication(server: str, data: dict):
 def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
     """Checking the RAM load of the balanced part of the cluster"""
     logger.debug("Starting cluster_load_verification")
-    if len(cluster_obj.cl_nodes) - len(excluded_nodes) == 1:
-        logger.error('It is impossible to balance one node!')
+    if len(set(cluster_obj.cl_nodes.keys()) - set(excluded_nodes)) <= 1:
+        logger.error('It is impossible to balance <= 1 node!')
         sys.exit(1)
     assert 0 < mem_load < 1, 'The cluster RAM load should be in the range from 0 to 1'
     if mem_load >= THRESHOLD:
