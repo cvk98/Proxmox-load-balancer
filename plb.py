@@ -8,7 +8,6 @@ import urllib3
 import yaml
 import smtplib
 import socket
-from random import random
 from email.message import EmailMessage
 from time import sleep
 from itertools import permutations
@@ -27,7 +26,7 @@ server_url = f'https://{cfg["proxmox"]["url"]["ip"]}:{cfg["proxmox"]["url"]["por
 auth = dict(cfg["proxmox"]["auth"])
 
 """Parameters"""
-CONFIG_DEVIATION = CD = cfg["parameters"]["deviation"] / 200
+CONFIG_DEVIATION = CD = cfg["parameters"]["deviation"] / 100
 THRESHOLD = cfg["parameters"]["threshold"] / 100
 LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
 MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
@@ -76,7 +75,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 payload = dict()  # PVEAuthCookie
 header = dict()  # CSRFPreventionToken
 sum_of_deviations: float = 0
-iteration = 0
 
 
 class Cluster:
@@ -298,20 +296,14 @@ def cluster_load_verification(mem_load: float, cluster_obj: object) -> None:
 def need_to_balance_checking(cluster_obj: object) -> bool:
     """Checking the need for balancing"""
     logger.debug("Starting need_to_balance_checking")
-    global sum_of_deviations, iteration
+    global sum_of_deviations
     nodes = cluster_obj.included_nodes
     average = cluster_obj.mem_load_included
     for host, values in nodes.items():
         values["deviation"] = abs(values["mem_load"] - average)
     sum_of_deviations = sum(values["deviation"] for values in nodes.values())
-    if iteration > 10:
-        operational_deviation = CD/2 if random() > 1/3 else CD/4 if random() > 1/6 else CD/8
-        logger.debug(f'operational_deviation changed to {operational_deviation}')
-        iteration = 0
-    else:
-        operational_deviation = CONFIG_DEVIATION
     for values in nodes.values():
-        if values["deviation"] > operational_deviation:
+        if values["deviation"] > CONFIG_DEVIATION:
             return True
     else:
         return False
@@ -459,7 +451,6 @@ def send_mail(message: str):
 
 def main():
     """The main body of the program"""
-    global iteration
     authentication(server_url, auth)
     cluster = Cluster(server_url)
     if ONLY_ON_MASTER:
@@ -474,7 +465,6 @@ def main():
     need_to_balance = need_to_balance_checking(cluster)
     logger.info(f'Need to balance: {need_to_balance}')
     if need_to_balance:
-        iteration = 0
         balance_cl = temporary_dict(cluster)
         sorted_variants = calculating(balance_cl, cluster)
         if sorted_variants:
@@ -486,7 +476,6 @@ def main():
             pass  # TODO Aggressive algorithm
     else:
         logger.info('The cluster is balanced. Waiting 300 seconds.')
-        iteration += 1
         sleep(300)
 
 
