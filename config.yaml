@@ -15,6 +15,7 @@ parameters:
   lxc_migration: OFF       # Container migration (LXCs are rebooted during migration!!!)
   migration_timeout: 1000  # For the future
   only_on_master: OFF      # Only run PLB on the current cluster master
+  dry_run: OFF             # Dry run (don't balance)
 
 # List of exclusions
 exclusions:

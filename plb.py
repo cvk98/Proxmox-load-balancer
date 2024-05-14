@@ -32,6 +32,7 @@ THRESHOLD = cfg["parameters"]["threshold"] / 100
 LXC_MIGRATION = cfg["parameters"]["lxc_migration"]
 MIGRATION_TIMEOUT = cfg["parameters"]["migration_timeout"]
 ONLY_ON_MASTER = cfg["parameters"].get("only_on_master", False)
+DRY_RUN = cfg["parameters"]["dry_run"]
 
 """Exclusions"""
 excluded_vms = []
@@ -372,6 +373,10 @@ def vm_migration(variants: list, cluster_obj: object) -> None:
             sys.exit(1)
         donor, recipient, vm = variant[:3]
         logger.debug(f'VM:{vm} migration from {donor} to {recipient}')
+        if DRY_RUN:
+            logger.info('DRY RUN, stop here.')
+            break
+        
         if vm in cluster_obj.cl_lxcs:
             options = {'target': recipient, 'restart': 1}
             url = f'{cluster_obj.server}/api2/json/nodes/{donor}/lxc/{vm}/migrate'
