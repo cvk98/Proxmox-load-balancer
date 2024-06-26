@@ -1,5 +1,7 @@
 ## Proxmox-load-balancer Pro v0.6.4  
 
+## Unfortunately, I no longer have time to support the project and answer questions. I am ready to transfer all rights to it to anyone who wants to support and develop it. I will post a link to your repository. There are many interesting ideas in the pool request. If you are interested, write to me. I hope he helped a lot and made admin life easier =)
+
 ## Please take a look: https://github.com/cvk98/Proxmox-load-balancer/issues/7
 
 If you use this script and it works correctly - please do not be lazy to put a star. This motivates me very much to develop my product. If you lack some functions, write about it. I will try to add them if they fit into the product concept.
