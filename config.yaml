@@ -22,7 +22,12 @@ exclusions:
   nodes: []  # Example: [px-3] or [px-3, px-4, px-8, px-9]
 
 # Loguru settings
-logging_level: 'INFO'  # You can choose 'DEBUG" or "INFO" or "WARNING" or "ERROR"
+logging:
+  level: 'DEBUG' # You can choose 'DEBUG" or "INFO" or "WARNING" or "ERROR"
+  rotation: '1 day' # If output is filename
+  retention: '2 days' # If output is filename
+  format: '{level} | {message}'
+  output: 'stdout' # Can be a file name or "stdout"
 
 # Mail settings
 mail:
