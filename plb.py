@@ -96,6 +96,9 @@ class Cluster:
         self.cl_lxcs = set()                        # Defined in Cluster.self.cluster_vms
         self.cl_vms_included: dict = {}             # All VMs and LXC are running in a balanced cluster
         self.cl_vms: dict = self.cluster_vms()      # All VMs and Lxc are running in the cluster
+        """HA Groups"""
+        self.cl_ha_groups: dict = self.cluster_ha() # HA group to nodes
+        self.cl_ha_vms: dict = self.cluster_ha_vm() # HA vm to group
         """RAM"""
         self.cl_mem_included: int = 0               # Cluster memory used in bytes for balanced nodes
         self.cl_mem: int = 0                        # Cluster memory used in bytes
@@ -206,6 +209,59 @@ class Cluster:
                 self.cluster_information.remove(item)
         del temp
         return vms_dict
+
+    def cluster_ha(self):
+        """Getting HA groups by API"""
+        logger.debug("Launching Cluster.cluster_ha")
+
+        url = f'{self.server}/api2/json/cluster/ha/groups'
+        logger.debug('Attempt to get information about the cluster HA groups...')
+        resources_request = rr = requests.get(url, cookies=payload, verify=False)
+        if resources_request.ok:
+            logger.debug(f'Information about the cluster HA groups has been received. Response code: {rr.status_code}')
+        else:
+            logger.warning(f'Execution error {Cluster.cluster_items.__qualname__}')
+            logger.warning(
+                f'Could not get information about the HA cluster groups. Response code: {rr.status_code}. Reason: ({rr.reason})')
+            sys.exit(0)
+
+        cluster_ha_dict = {}
+        temp = rr.json()['data']
+        del resources_request, rr
+        for item in temp:
+            cluster_ha_dict[item['group']] = item['nodes'].split(',')
+
+        logger.debug(f'HA groups: {cluster_ha_dict}')
+        return cluster_ha_dict
+
+    def cluster_ha_vm(self):
+        """Getting HA vm's group"""
+        logger.debug("Launching Cluster.cluster_ha_vm")
+
+        url = f'{self.server}/api2/json/cluster/ha/status/current'
+        logger.debug('Attempt to get information about the cluster HA status current...')
+        resources_request = rr = requests.get(url, cookies=payload, verify=False)
+        if resources_request.ok:
+            logger.debug(f'Information about the cluster HA groups has been received. Response code: {rr.status_code}')
+        else:
+            logger.warning(f'Execution error {Cluster.cluster_items.__qualname__}')
+            logger.warning(
+                f'Could not get information about the HA status current. Response code: {rr.status_code}. Reason: ({rr.reason})')
+            sys.exit(0)
+
+        ha_vm_dict = {}
+        temp = rr.json()['data']
+        del resources_request, rr
+        for item in temp:
+            if item['type'] != 'service':
+                continue
+
+            # sid example: vm:134
+            vm_id = int(item['sid'].split(':')[1])
+            ha_vm_dict[vm_id] = item['group']
+
+        logger.debug(f'HA vm groups: {ha_vm_dict}')
+        return ha_vm_dict
 
     def cluster_mem(self):
         """Calculating RAM usage from cluster resources"""
@@ -344,6 +400,8 @@ def calculating(hosts: object, cluster_obj: object) -> list:
     for host in permutations(nodes, 2):
         part_of_deviation = sum(values["deviation"] if node not in host else 0 for node, values in nodes.items())
         for vm in hosts[host[0]].values():
+            if not is_vm_migrateable_to_node(vm["vmid"], host[0], host[1], cluster_obj):
+                continue
             h0_mem_load = (nodes[host[0]]["mem"] - vm["mem"]) / nodes[host[0]]["maxmem"]
             h0_deviation = h0_mem_load - average if h0_mem_load > average else average - h0_mem_load
             h1_mem_load = (nodes[host[1]]["mem"] + vm["mem"]) / nodes[host[1]]["maxmem"]
@@ -357,7 +415,35 @@ def calculating(hosts: object, cluster_obj: object) -> list:
     return sorted(variants, key=lambda last: last[-1])
 
 
-def vm_migration(variants: list, cluster_obj: object) -> None:
+def is_vm_migrateable_to_node(vm_id: int, donor: str, recipient: str, cluster_obj: Cluster) -> bool:
+    """Checking the possibility of migration"""
+    if vm_id not in cluster_obj.cl_ha_vms:
+        logger.debug(f'VM:{vm_id} is not in any of HA group, migratable')
+        return True
+
+    vm_group = cluster_obj.cl_ha_vms[vm_id]
+    logger.debug(f'VM:{vm_id} is in HA group {vm_group}')
+
+    if vm_group not in cluster_obj.cl_ha_groups:
+        logger.warn(f'VM:{vm_id} is in HA group {vm_group}, but the group is not found, questionable state?')
+        return False
+
+    vm_group_nodes = cluster_obj.cl_ha_groups[vm_group]
+    logger.debug(f'VM:{vm_id} HA group {vm_group} nodes: {vm_group_nodes}')
+
+    if donor not in vm_group_nodes:
+        logger.warn(f'VM:{vm_id} is not in HA group {vm_group} on node {donor}, questionable state?')
+        return False
+
+    if recipient not in vm_group_nodes:
+        logger.debug(f'VM:{vm_id} is not in HA group {vm_group} on node {recipient}, not migratable')
+        return False
+
+    logger.debug(f'VM:{vm_id} is in HA group {vm_group} on node {recipient}, migratable')
+    return True
+
+
+def vm_migration(variants: list, cluster_obj: Cluster) -> None:
     """VM migration function from the suggested variants"""
     logger.debug("Starting vm_migration")
     local_disk = None
