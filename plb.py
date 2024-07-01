@@ -482,6 +482,7 @@ def main():
             logger.info('Waiting 10 seconds for cluster information update')
             sleep(10)
         else:
+            logger.info('No available variants, Wait 60 seconds.')
             sleep(60)
             pass  # TODO Aggressive algorithm
     else:
